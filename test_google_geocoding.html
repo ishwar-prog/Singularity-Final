@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Google Geocoding</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1e293b; color: white; }
+        .test { background: #334155; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { border-left: 4px solid #22c55e; }
+        .error { border-left: 4px solid #ef4444; }
+        button { background: #3b82f6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #2563eb; }
+        pre { background: #0f172a; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🗺️ Google Geocoding API Test</h1>
+    <p>Testing accurate location extraction for disaster mapping</p>
+    
+    <button onclick="testGeocoding()">Run Tests</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const GOOGLE_API_KEY = 'AIzaSyBbyqD9hDksRPyuqU2a6Pcw0Hc_8lLp-0A';
+        
+        async function geocode(location) {
+            const response = await fetch(
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${GOOGLE_API_KEY}`
+            );
+            return await response.json();
+        }
+        
+        async function testGeocoding() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Running tests...</h2>';
+            
+            const tests = [
+                { name: 'Assam, India', expected: 'Should be in Northeast India' },
+                { name: 'Mumbai, Maharashtra, India', expected: 'Should be in Western India' },
+                { name: 'Los Angeles, California, USA', expected: 'Should be in Southern California' },
+                { name: 'Tokyo, Japan', expected: 'Should be in Eastern Japan' },
+                { name: 'Sydney, Australia', expected: 'Should be in Southeast Australia' }
+            ];
+            
+            let html = '<h2>Test Results:</h2>';
+            
+            for (const test of tests) {
+                try {
+                    const data = await geocode(test.name);
+                    
+                    if (data.status === 'OK' && data.results.length > 0) {
+                        const result = data.results[0];
+                        const lat = result.geometry.location.lat;
+                        const lng = result.geometry.location.lng;
+                        const accuracy = result.geometry.location_type;
+                        
+                        html += `
+                            <div class="test success">
+                                <h3>✅ ${test.name}</h3>
+                                <p><strong>Coordinates:</strong> ${lat.toFixed(4)}, ${lng.toFixed(4)}</p>
+                                <p><strong>Accuracy:</strong> ${accuracy}</p>
+                                <p><strong>Full Address:</strong> ${result.formatted_address}</p>
+                                <p><strong>Expected:</strong> ${test.expected}</p>
+                                <p><a href="https://www.google.com/maps?q=${lat},${lng}" target="_blank" style="color: #60a5fa;">View on Google Maps</a></p>
+                            </div>
+                        `;
+                    } else {
+                        html += `
+                            <div class="test error">
+                                <h3>❌ ${test.name}</h3>
+                                <p>Status: ${data.status}</p>
+                                <p>Error: Could not geocode location</p>
+                            </div>
+                        `;
+                    }
+                } catch (error) {
+                    html += `
+                        <div class="test error">
+                            <h3>❌ ${test.name}</h3>
+                            <p>Error: ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

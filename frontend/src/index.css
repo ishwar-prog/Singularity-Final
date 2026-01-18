@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #0f172a;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* Leaflet map custom styles for dark theme */
+.leaflet-container {
+  background: #1e293b;
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  background: white;
+  color: #1e293b;
+  border-radius: 8px;
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+/* Custom disaster marker animation */
+.custom-disaster-marker {
+  animation: pulse-marker 2s ease-in-out infinite;
+}
+
+.custom-secondary-marker {
+  animation: bounce-marker 3s ease-in-out infinite;
+}
+
+@keyframes pulse-marker {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes bounce-marker {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
