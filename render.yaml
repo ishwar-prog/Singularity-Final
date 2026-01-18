@@ -22,7 +22,6 @@ services:
   - type: web
     name: disaster-relief-frontend
     runtime: static
-    region: oregon
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
