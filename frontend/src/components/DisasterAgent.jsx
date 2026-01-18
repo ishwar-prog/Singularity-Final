@@ -13,6 +13,7 @@ import { twMerge } from 'tailwind-merge';
 import LocationMap from './LocationMap';
 import PrecautionsSection from './PrecautionsSection';
 import NearbyDisasters from './NearbyDisasters';
+import api from '../config/api';
 
 const cn = (...inputs) => twMerge(clsx(inputs));
 
@@ -373,22 +374,21 @@ export default function DisasterAgent() {
     setTheme('neutral');
 
     try {
-      const baseUrl = 'http://localhost:8000';
       let response;
 
       if (inputMode === 'text' && textInput.trim()) {
-        response = await axios.post(`${baseUrl}/analyze`, { text: textInput, source: 'user' });
+        response = await axios.post(api.endpoints.analyze, { text: textInput, source: 'user' });
       } else if (inputMode === 'url' && urlInput.trim()) {
-        response = await axios.post(`${baseUrl}/analyze`, { text: urlInput, source: 'web' });
+        response = await axios.post(api.endpoints.analyze, { text: urlInput, source: 'web' });
       } else if (inputMode === 'image') {
         if (imageFile) {
           const formData = new FormData();
           formData.append('file', imageFile);
-          response = await axios.post(`${baseUrl}/analyze-image-upload`, formData, {
+          response = await axios.post(api.endpoints.analyzeImageUpload, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
           });
         } else if (imageUrl) {
-          response = await axios.post(`${baseUrl}/analyze-image`, { image_url: imageUrl });
+          response = await axios.post(api.endpoints.analyzeImage, { image_url: imageUrl });
         }
       }
 

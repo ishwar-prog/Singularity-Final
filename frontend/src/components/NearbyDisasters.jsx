@@ -7,6 +7,7 @@ import {
 import axios from 'axios';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import api from '../config/api';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -231,7 +232,7 @@ export default function NearbyDisasters() {
         setLocation({ latitude, longitude });
         
         try {
-          const response = await axios.post('http://localhost:8000/nearby-disasters', {
+          const response = await axios.post(api.endpoints.nearbyDisasters, {
             latitude,
             longitude,
             radius_km: 50

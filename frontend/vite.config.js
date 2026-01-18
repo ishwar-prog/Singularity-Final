@@ -7,4 +7,12 @@ export default defineConfig({
   plugins: [react(),
     tailwindcss()
   ],
+  server: {
+    proxy: {
+      '/analyze': 'http://localhost:8000',
+      '/analyze-image': 'http://localhost:8000',
+      '/analyze-image-upload': 'http://localhost:8000',
+      '/nearby-disasters': 'http://localhost:8000',
+    }
+  }
 })
