@@ -14,8 +14,8 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
 
@@ -23,7 +23,7 @@ function generateNearbyPoints(lat, lng, count = 8) {
   const points = [];
   const radiusKm = 100;
   const earthRadiusKm = 6371;
-  
+
   for (let i = 0; i < count; i++) {
     const angle = (360 / count) * i;
     const distance = radiusKm * (0.3 + Math.random() * 0.6);
@@ -31,10 +31,10 @@ function generateNearbyPoints(lat, lng, count = 8) {
     const distRad = distance / earthRadiusKm;
     const latRad = lat * Math.PI / 180;
     const lngRad = lng * Math.PI / 180;
-    
+
     const newLatRad = Math.asin(Math.sin(latRad) * Math.cos(distRad) + Math.cos(latRad) * Math.sin(distRad) * Math.cos(angleRad));
     const newLngRad = lngRad + Math.atan2(Math.sin(angleRad) * Math.sin(distRad) * Math.cos(latRad), Math.cos(distRad) - Math.sin(latRad) * Math.sin(newLatRad));
-    
+
     points.push({
       name: `Affected Area ${i + 1}`,
       lat: newLatRad * 180 / Math.PI,
@@ -43,7 +43,7 @@ function generateNearbyPoints(lat, lng, count = 8) {
       type: 'affected_area'
     });
   }
-  
+
   return points;
 }
 
@@ -83,7 +83,7 @@ export default function LocationMap({ location, disasterType, urgency, peopleAff
       }
 
       console.log('LocationMap: Valid coordinates:', { centerLat, centerLng, cityName });
-      
+
       const filteredLocations = locations.filter(loc => {
         const dist = calculateDistance(centerLat, centerLng, loc.lat, loc.lng);
         return dist <= 100;
@@ -104,7 +104,7 @@ export default function LocationMap({ location, disasterType, urgency, peopleAff
 
       try {
         const bounds = L.latLng(centerLat, centerLng).toBounds(100000);
-        
+
         const map = L.map(mapRef.current, {
           center: [centerLat, centerLng],
           zoom: 10,
@@ -114,9 +114,9 @@ export default function LocationMap({ location, disasterType, urgency, peopleAff
           minZoom: 8,
           maxZoom: 19
         });
-        
+
         console.log('LocationMap: Map instance created, adding tile layer...');
-        
+
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -222,7 +222,7 @@ export default function LocationMap({ location, disasterType, urgency, peopleAff
     <div className="w-full h-full">
       <div className="relative rounded-xl overflow-hidden border border-slate-700/50 shadow-2xl h-full">
         <div ref={mapRef} style={{ height: '100%', width: '100%', minHeight: '250px' }} />
-        
+
         <div className="absolute bottom-2 left-2 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg p-2 z-1000 text-xs">
           <div className="flex items-center gap-2 mb-1">
             <MapPin className="w-3 h-3 text-slate-600" />

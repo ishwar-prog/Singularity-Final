@@ -142,7 +142,7 @@ const DISASTER_PRECAUTIONS = {
 export default function PrecautionsSection({ disasterType, urgency, className }) {
   const normalizedType = disasterType?.toLowerCase().trim() || 'default';
   const precautionData = DISASTER_PRECAUTIONS[normalizedType] || DISASTER_PRECAUTIONS.default;
-  
+
   const urgencyColors = {
     critical: "border-red-500/50 bg-red-500/10",
     high: "border-orange-500/50 bg-orange-500/10",

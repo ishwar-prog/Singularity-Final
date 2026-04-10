@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  MapPin, Navigation, Loader2, AlertTriangle, Shield, 
+import {
+  MapPin, Navigation, Loader2, AlertTriangle, Shield,
   Radio, Clock, AlertOctagon, RefreshCw, Target, Zap, X
 } from 'lucide-react';
 import axios from 'axios';
@@ -230,20 +230,20 @@ export default function NearbyDisasters() {
       async (position) => {
         const { latitude, longitude } = position.coords;
         setLocation({ latitude, longitude });
-        
+
         try {
           const response = await axios.post(api.endpoints.nearbyDisasters, {
             latitude,
             longitude,
             radius_km: 50
           });
-          
+
           setDisasters(response.data.disasters || []);
         } catch (err) {
           console.error('API Error:', err);
           setError(
-            err.response?.data?.detail || 
-            err.message || 
+            err.response?.data?.detail ||
+            err.message ||
             "Failed to fetch nearby disasters. Please ensure the backend is running on port 8000."
           );
         } finally {
@@ -253,9 +253,9 @@ export default function NearbyDisasters() {
       (err) => {
         setLocationError(
           err.code === 1 ? "Location access denied. Please enable location permissions." :
-          err.code === 2 ? "Location unavailable. Please check your device settings." :
-          err.code === 3 ? "Location request timed out. Please try again." :
-          "Failed to get your location"
+            err.code === 2 ? "Location unavailable. Please check your device settings." :
+              err.code === 3 ? "Location request timed out. Please try again." :
+                "Failed to get your location"
         );
         setLoading(false);
       },
@@ -386,15 +386,15 @@ export default function NearbyDisasters() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        
+
         {/* Header */}
-        <motion.header 
+        <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10"
         >
           <div className="flex items-center gap-4">
-            <motion.div 
+            <motion.div
               animate={{ rotate: [0, 5, -5, 0] }}
               transition={{ duration: 5, repeat: Infinity }}
               className="p-3 rounded-2xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-white/10"
@@ -408,7 +408,7 @@ export default function NearbyDisasters() {
               <p className="text-slate-400 text-sm">Real-time monitoring within 50km radius</p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             {location && (
               <div className="px-4 py-2 rounded-xl bg-black/30 border border-white/10">
@@ -420,7 +420,7 @@ export default function NearbyDisasters() {
                 </div>
               </div>
             )}
-            
+
             <button
               onClick={getUserLocation}
               disabled={loading}
@@ -506,15 +506,15 @@ export default function NearbyDisasters() {
                 Active Disasters ({disasters.length})
               </h2>
             </div>
-            
+
             <div className="bg-gradient-to-br from-white/[0.06] to-white/[0.02] border border-white/10 rounded-2xl p-4 backdrop-blur-xl">
               <div className="mb-4">
                 <h3 className="text-lg font-bold text-white mb-2">Interactive Map</h3>
                 <p className="text-sm text-slate-400">Click on disaster markers (⚠️) to view details</p>
               </div>
-              <div 
-                ref={mapRef} 
-                style={{ height: '500px', width: '100%' }} 
+              <div
+                ref={mapRef}
+                style={{ height: '500px', width: '100%' }}
                 className="rounded-xl overflow-hidden border border-slate-700/50"
               />
               <div className="mt-4 flex flex-wrap gap-3 justify-center">
@@ -577,7 +577,7 @@ export default function NearbyDisasters() {
             <Shield className="w-16 h-16 text-green-400 mx-auto mb-4" />
             <h3 className="text-2xl font-semibold text-green-300 mb-2">No Active Disasters</h3>
             <p className="text-slate-400 mb-6">No disasters detected within 50 km of your location</p>
-            
+
             <div className="bg-black/20 rounded-xl p-6 max-w-2xl mx-auto">
               <h4 className="text-lg font-bold text-white mb-4 flex items-center justify-center gap-2">
                 <Zap className="w-5 h-5 text-blue-400" />
@@ -600,9 +600,9 @@ export default function NearbyDisasters() {
       {/* Disaster Detail Modal */}
       <AnimatePresence>
         {selectedDisaster && (
-          <DisasterDetailModal 
-            disaster={selectedDisaster} 
-            onClose={() => setSelectedDisaster(null)} 
+          <DisasterDetailModal
+            disaster={selectedDisaster}
+            onClose={() => setSelectedDisaster(null)}
           />
         )}
       </AnimatePresence>
